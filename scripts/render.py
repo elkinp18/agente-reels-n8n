@@ -1,4 +1,5 @@
 import os
+import random
 import subprocess
 import textwrap
 from pathlib import Path
@@ -19,10 +20,19 @@ for i, frase in enumerate(frases, 1):
         raise SystemExit(f'Falta la frase {i}')
     if len(frase) > 140:
         raise SystemExit(f'La frase {i} es muy larga: maximo 140 caracteres')
-    if not (ASSETS / f'escena{i}.png').is_file():
-        raise SystemExit(f'Falta assets/escena{i}.png')
-if not (ASSETS / 'musica.mp3').is_file():
-    raise SystemExit('Falta assets/musica.mp3')
+# Buscar todas las canciones MP3 disponibles
+canciones = sorted(
+    archivo for archivo in ASSETS.iterdir()
+    if archivo.is_file() and archivo.suffix.lower() == ".mp3"
+)
+
+if not canciones:
+    raise SystemExit("No hay canciones MP3 en assets")
+
+# Elegir una canción automáticamente
+musica = random.choice(canciones)
+
+print(f"Musica seleccionada: {musica.name}")
 
 clips = []
 for i, frase in enumerate(frases, 1):
