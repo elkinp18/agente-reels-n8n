@@ -19,8 +19,8 @@ for i, frase in enumerate(frases, 1):
         raise SystemExit(f'Falta la frase {i}')
     if len(frase) > 140:
         raise SystemExit(f'La frase {i} es muy larga: maximo 140 caracteres')
-    if not (ASSETS / f'escena{i}.jpg').is_file():
-        raise SystemExit(f'Falta assets/escena{i}.jpg')
+    if not (ASSETS / f'escena{i}.png').is_file():
+        raise SystemExit(f'Falta assets/escena{i}.png')
 if not (ASSETS / 'musica.mp3').is_file():
     raise SystemExit('Falta assets/musica.mp3')
 
