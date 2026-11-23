@@ -26,7 +26,7 @@ if not (ASSETS / 'musica.mp3').is_file():
 
 clips = []
 for i, frase in enumerate(frases, 1):
-    image = ASSETS / f'escena{i}.jpg'
+    image = ASSETS / f'escena{i}.png'
     text = ROOT / f'frase{i}.txt'
     text.write_text('\n'.join(textwrap.wrap(frase, 23, break_long_words=False)), encoding='utf-8')
     clip = ROOT / f'escena{i}.mp4'
