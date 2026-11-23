@@ -4,12 +4,24 @@ import subprocess
 import textwrap
 from pathlib import Path
 
+# Configuración del proyecto
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets'
 OUT = ROOT / 'reel.mp4'
+
 DURATION = 10
 FPS = 30
 
+# Buscar automáticamente las canciones
+canciones = sorted(ASSETS.glob("*.mp3"))
+
+if not canciones:
+    raise SystemExit("No hay canciones MP3 en assets")
+
+# Seleccionar una canción aleatoria
+musica = random.choice(canciones)
+
+print(f"Música seleccionada: {musica.name}")
 
 def run(args):
     subprocess.run(args, check=True, cwd=ROOT)
@@ -67,7 +79,7 @@ listfile = ROOT / 'clips.txt'
 listfile.write_text(''.join(f"file '{p.name}'\n" for p in clips), encoding='utf-8')
 run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y',
      '-f', 'concat', '-safe', '0', '-i', str(listfile),
-     '-stream_loop', '-1', '-i', str(ASSETS / 'musica.mp3'),
+     '-stream_loop', '-1', '-i', str(musica),
      '-map', '0:v:0', '-map', '1:a:0',
      '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k',
      '-af', 'volume=0.20,afade=t=in:st=0:d=1,afade=t=out:st=28:d=2',
