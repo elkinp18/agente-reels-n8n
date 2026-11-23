@@ -1,0 +1,46 @@
+name: Generar Reel Cinematografico
+
+on:
+  workflow_dispatch:
+    inputs:
+      frase1:
+        description: 'Primera frase'
+        required: true
+        default: 'Cada caída deja una enseñanza'
+        type: string
+      frase2:
+        description: 'Segunda frase'
+        required: true
+        default: 'Lo importante es seguir avanzando'
+        type: string
+      frase3:
+        description: 'Tercera frase'
+        required: true
+        default: 'Siempre existe un nuevo comienzo'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener archivos del repositorio
+        uses: actions/checkout@v4
+      - name: Instalar FFmpeg y fuentes
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Renderizar video
+        env:
+          FRASE1: ${{ inputs.frase1 }}
+          FRASE2: ${{ inputs.frase2 }}
+          FRASE3: ${{ inputs.frase3 }}
+        run: python3 scripts/render.py
+      - name: Guardar MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-generado
+          path: reel.mp4
+          retention-days: 7
